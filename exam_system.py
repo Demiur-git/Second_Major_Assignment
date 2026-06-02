@@ -58,10 +58,10 @@ class ExamSys:
             print("4. 生成准考证文件")
             print("+--------------------------------------------------------------------------")
             print("0. 退出系统")
-            function_number=input("请输入功能编号：")
+            function_number=input("请输入功能编号：").strip()
             #如果输入不是正确的编号则要求重新输入
             while function_number!='0' or function_number!='1' or function_number!='2' or function_number!='3' or function_number!='4':
-                function_number=input("功能编号不存在，请正确输入功能编号（0~4）：")
+                function_number=input("功能编号不存在，请正确输入功能编号（0~4）：").strip()
             #根据输入的编号调用函数
             if function_number=='0':
                 print("感谢使用，系统已退出。再见")
@@ -69,19 +69,44 @@ class ExamSys:
             elif function_number=='1':
                 self.find_student()
             elif function_number=='2':
-                self.random_roll_call(int(input("请输入你想要随即抽取多少名学生：")))
+                self.random_roll_call()
             elif function_number=='3':
                 self.generate_exam_arrangement()
             else:
                 self.generate_admission_tickets()
 
     def find_student(self):
-        #占位
-        pass
+        #根据学生学号来查找学生信息
+        target_student_id=input("请输入你想要查找的学生的学号：").strip()
+        for student in self.students:
+            if student.student_id == target_student_id:
+                print("已找到该学生，该学生信息如下：")
+                print(f"序号：{student.number} 姓名：{student.name} 性别：{student.gender} 班级：{student.class_number} 学号：{student.student_id} 学院：{student.department}")
+                return
+        print("未找到该学号对应的学生，请重新检查输入是否正确")
 
-    def random_roll_call(self, number):
-        #占位
-        pass
+    def random_roll_call(self):
+        #根据用户需求随机点名，返回对应数量的不重复随机学生名单
+        while True:
+            try:
+                s=input(f"请输入需要点名的学生数量（共{len(self.students)}名学生）").strip()
+                n=int(s)
+                if n<=0:
+                    print("点名人数必须大于0")
+                elif n>len(self.students):
+                    print(f"点名人数（{n}）超过学生总人数（{len(self.students)}），请重新输入")
+                else:
+                    #先建立一个新的列表把原有列表复制过来，然后先打乱一次，再从中截取相应长度的片段再随机排列一次
+                    temp_list=self.students
+                    random.shuffle(temp_list)
+                    chosen_student=random.sample(temp_list,n)
+                    print("本次随机点名结果：")
+                    #通过enumerate函数同时对序号和抽取到的学生信息进行循环输出
+                    for index,student in enumerate(chosen_student,start=1):
+                        print(f"{index}.{student.name}  {student.student_id}")
+
+            except ValueError:
+                print(f"[输入错误] invalid literal for int() with base 10:\'{s}\'")
 
     def generate_exam_arrangement(self):
         #占位
