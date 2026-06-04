@@ -75,6 +75,17 @@ class ExamSys:
             else:
                 self.generate_admission_tickets()
 
+            #功能执行完毕，询问是否需要再执行其他功能
+            while True:
+                again=input("功能已执行完毕，请问是否需要再执行其他功能：（1-需要执行，0-不需要执行，退出程序）").strip()
+                if again=='0':
+                    print("感谢使用，系统已退出。再见")
+                    return
+                elif again=='1':
+                    break
+                else:
+                    print("输入无效，请输入0或1")
+
     def find_student(self):
         #根据学生学号来查找学生信息
         target_student_id=input("请输入你想要查找的学生的学号：").strip()
