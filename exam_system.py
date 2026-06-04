@@ -12,7 +12,7 @@ class ExamSys:
         #读取学生名单，支持制表符和空格作为间隔，并且跳过表头
         filename="人工智能编程语言学生名单.txt"
         try:
-            with open(filename,'r')as f:
+            with open(filename,'r',encoding='utf-8')as f:
                 lines = f.readlines()
         except FileNotFoundError:
             print(f"未找到{filename},请确保该文件存放于文件根目录")
@@ -60,7 +60,7 @@ class ExamSys:
             print("0. 退出系统")
             function_number=input("请输入功能编号：").strip()
             #如果输入不是正确的编号则要求重新输入
-            while function_number!='0' or function_number!='1' or function_number!='2' or function_number!='3' or function_number!='4':
+            while function_number!='0' and function_number!='1' and function_number!='2' and function_number!='3' and function_number!='4':
                 function_number=input("功能编号不存在，请正确输入功能编号（0~4）：").strip()
             #根据输入的编号调用函数
             if function_number=='0':
@@ -92,9 +92,9 @@ class ExamSys:
                 s=input(f"请输入需要点名的学生数量（共{len(self.students)}名学生）").strip()
                 n=int(s)
                 if n<=0:
-                    print("点名人数必须大于0")
+                    print("[输入错误]点名人数必须大于0")
                 elif n>len(self.students):
-                    print(f"点名人数（{n}）超过学生总人数（{len(self.students)}），请重新输入")
+                    print(f"[输入错误]点名人数（{n}）超过学生总人数（{len(self.students)}），请重新输入")
                 else:
                     #先建立一个新的列表把原有列表复制过来，然后先打乱一次，再从中截取相应长度的片段再随机排列一次
                     temp_list=self.students
@@ -104,6 +104,7 @@ class ExamSys:
                     #通过enumerate函数同时对序号和抽取到的学生信息进行循环输出
                     for index,student in enumerate(chosen_student,start=1):
                         print(f"{index}.{student.name}  {student.student_id}")
+                    return
 
             except ValueError:
                 print(f"[输入错误] invalid literal for int() with base 10:\'{s}\'")
