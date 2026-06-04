@@ -109,9 +109,34 @@ class ExamSys:
                 print(f"[输入错误] invalid literal for int() with base 10:\'{s}\'")
 
     def generate_exam_arrangement(self):
-        #占位
-        pass
+        #将全班学生顺序打乱并生成考试安排表
+        if not self.students:
+            print("没有任何学生信息，无法生成考场安排")
+            return
+
+        temp_list=self.students
+        random.shuffle(temp_list)
+        arrangement=[]
+
+        with open('考场安排表.txt','w',encoding='utf-8') as f:
+            for index,student in enumerate(temp_list,start=1):
+                f.write(f"{index},{student.name},{student.student_id}\n")
+                arrangement.append([index,student.name,student.student_id])
+        self.exam_arrangement=arrangement
+        print("考试安排表已成功生成，请打开\'考试安排表.txt\'进行查看")
 
     def generate_admission_tickets(self):
-        #占位
-        pass
+        #根据已经生成的考场安排信息生成准考证
+        if not self.exam_arrangement:
+            print("没有考试安排表，请先通过功能3生成考试安排表")
+            return
+
+        folder='准考证'
+        os.makedirs(folder,exist_ok=True)
+
+        for index,name,student_id in self.exam_arrangement:
+            filename=os.path.join(folder,f"{index:02d}.txt")
+            with open(filename,'w',encoding='utf-8') as f:
+                f.write(f"考场座位号：{index}\n姓名：{name}\n学号：{student_id}\n")
+
+        print("已经成功为所有学生生成准考证，请前往\'准考证\'文件夹中查看")
