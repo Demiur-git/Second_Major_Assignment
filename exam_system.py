@@ -5,7 +5,7 @@ import student
 class ExamSys:
     def __init__(self):
         self.students=[]
-        self.exam_number=None
+        self.exam_arrangement=None
         self.load_students()
 
     def load_students(self):
@@ -139,9 +139,22 @@ class ExamSys:
 
     def generate_admission_tickets(self):
         #根据已经生成的考场安排信息生成准考证
+        #如果没有执行过3，则会先检查是不是已经存在考场安排表.txt文件
         if not self.exam_arrangement:
-            print("没有考试安排表，请先通过功能3生成考试安排表")
-            return
+            if os.path.exists("考场安排表.txt"):
+                print("检测到已有考场安排表，正在读取")
+                self.exam_arrangement = []
+                with open("考场安排表.txt", "r", encoding="utf-8") as f:
+                    for line in f:
+                        line = line.strip()
+                        if not line:
+                            continue
+                        index, name, student_id = line.split(',')
+                        self.exam_arrangement.append([(int)(index), name, student_id])
+                print("考场安排表加载成功")
+            else:
+                print("没有考试安排表，请先通过功能3生成考试安排表")
+                return
 
         folder='准考证'
         os.makedirs(folder,exist_ok=True)
